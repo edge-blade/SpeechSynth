@@ -96,13 +96,18 @@
         this.popoutElement.id = 'speechSynth-container';
         
         this.toggleButton = document.createElement('div');
-        tabElement.className = 'speechSynth-toggle';
-        tabElement.id = 'speechSynth-toggle';
+        this.toggleButton.className = 'speechSynth-toggle';
+        this.toggleButton.id = 'speechSynth-toggle';
         this.popoutElement.appendChild(this.toggleButton);
 
         // create other controls
         var controlsContainer = document.createElement('div');
         controlsContainer.className = 'speechSynth-controls';
+
+        // Label
+        var selectLabel = CreateNewDomElement('label', 'speechSynth-label', 'speechSynth-label');
+        selectLabel.text = 'Language';
+        controlsContainer.appendChild(selectLabel);
 
         // Select
         this.voiceSelector = CreateNewDomElement('select', 'speechSynth-select', 'speechSynth-select');
@@ -168,17 +173,17 @@
             }
         }));
         
-        // HTML control events
-        function toggleMenu() {
+        this.popoutElement.addEventListener(this.clickEvt, function (event) {
             this.isVisible = !this.isVisible;
+                var closedClass = 'closed';
             if (this.isVisible) {
                 // Hide the menu
-                
+                this.popoutElement.className += closedClass;
             } else {
                 // Show the menu
-                
+                this.popoutElement.className = this.popoutElement.className.replace('/\b' + closedClass +'\b/', '');
             }
-        }
+        });
     };
 
 	//////////////////////////////////////////////////////////////////////////////////
