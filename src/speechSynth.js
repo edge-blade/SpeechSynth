@@ -7,7 +7,8 @@
 ////////////////////////////////////
 (function (window, document, undefined) {
 	"use strict";
-	
+	var closedClass = ' closed';
+    
 	var SpeechSynthProto,
         SpeechSynth = function (options) {
             //Unchanging settings and defaults
@@ -92,7 +93,7 @@
         // controlLocation: top, bottom, left, right
         // Create container
         this.popoutElement = document.createElement('div');
-        this.popoutElement.className = 'speechSynth-container ' + this.options.controlLocation.toLowerCase();
+        this.popoutElement.className = 'speechSynth-container ' + this.options.controlLocation.toLowerCase() + closedClass;
         this.popoutElement.id = 'speechSynth-container';
         
         this.toggleButton = document.createElement('div');
@@ -115,16 +116,18 @@
         
         // Play button
         this.playButton = CreateNewDomElement('button', 'speechsynth-play', 'speechsynth-play');
+        this.playButton.textContent = 'Play';
         controlsContainer.appendChild(this.playButton);
 
         // Pause button
         this.pauseButton = CreateNewDomElement('button', 'speechsynth-pause', 'speechsynth-pause');
+        this.pauseButton.textContent = 'Pause';
         controlsContainer.appendChild(this.pauseButton);
         
         // append controls to container
         this.popoutElement.appendChild(controlsContainer);
         // Add controls to the page
-        document.appendChild(this.popoutElement);
+        document.body.appendChild(this.popoutElement);
     };
     
 	//////////////////////////////////////////////////////////////////////////////////
@@ -146,7 +149,7 @@
         }
         
         // default needs work to run on all browsers properly
-        for (var i = 0; i < voiceSelect.options.length; i++) {
+        for (var i = 0; i < this.voiceSelector.options.length; i++) {
             if (this.voiceSelector.options[i].getAttribute('data-name') == this.options.defaultLanguageText) {
                 this.voiceSelector.selectedIndex = i;
                 break;
@@ -157,31 +160,31 @@
 	//////////////////////////////////////////////////////////////////////////////////
     
     SpeechSynthProto.addEvents = function ( ) {
+        var self = this;
         // Add the play button
-        this.events.push(this.playButton.addEventListener(this.clickEvt, function(event) {
+        self.events.push(self.playButton.addEventListener(self.clickEvt, function(event) {
             event.preventDefault();
 
-            var text = this.getSelectionText();
-            this.speechSynthSpeak(text);
+            var text = self.getSelectionText();
+            self.speechSynthSpeak(text);
         }));
         // Add the stop button
-        this.events.push(this.pauseButton.addEventListener(this.clickEvt, function(event){
+        self.events.push(self.pauseButton.addEventListener(self.clickEvt, function(event){
             event.preventDefault();
 
-            if(this.speechSynth.speaking){
-                this.speechSynth.cancel();
+            if(self.speechSynth.speaking){
+                self.speechSynth.cancel();
             }
         }));
         
-        this.popoutElement.addEventListener(this.clickEvt, function (event) {
-            this.isVisible = !this.isVisible;
-                var closedClass = 'closed';
-            if (this.isVisible) {
+        self.toggleButton.addEventListener(self.clickEvt, function (event) {
+            self.isVisible = !self.isVisible;
+            if (!self.isVisible) {
                 // Hide the menu
-                this.popoutElement.className += closedClass;
+                self.popoutElement.className += closedClass;
             } else {
                 // Show the menu
-                this.popoutElement.className = this.popoutElement.className.replace('/\b' + closedClass +'\b/', '');
+                self.popoutElement.className = self.popoutElement.className.replace(closedClass, '');
             }
         });
     };
