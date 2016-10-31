@@ -5,52 +5,53 @@
 // MIT-style license. Copyright 2016 Nick A. Beers
 //
 ////////////////////////////////////
-(function(window, document, undefined) {
+(function (window, document, undefined) {
 	"use strict";
 	
-	var SpeechSynthProto;
-	var SpeechSynth = function(options) {
-        //Unchanging settings and defaults
-		// Default values for some properties
-        this.speechSynth = window.speechSynthesis;
-        this.defaultLanguageText = 'Google US English';
-        this.volume = 1;
-        this.rate = 1;
-        this.pitch = 1;
+	var SpeechSynthProto,
+        SpeechSynth = function (options) {
+            //Unchanging settings and defaults
+            // Default values for some properties
+            this.speechSynth = window.speechSynthesis;
 
-        // Setup plugin specific options
-        this.popoutElement = {};
-        this.isVisible = false;
-        this.voiceSelector = {};
-        this.playButton = {};
-        this.pauseButton = {};
-        this.events = [];
+            // Setup plugin specific options
+            this.popoutElement = {};
+            this.isVisible = false; // for toggle control
+            this.voiceSelector = {};
+            this.playButton = {};
+            this.pauseButton = {};
+            this.events = [];
 
-        // Event types
-        this.clickEvt = (this.usesTouch) ? "touchstart" : "mousedown";
-        
-        // set options and create element
-        this.setOptions(options);
-        this.init(); 
-	};
+            // Event types
+            this.clickEvt = (this.usesTouch) ? "touchstart" : "mousedown";
+
+            // set options and create element
+            this.setOptions(options);
+            this.init();
+	    };
 
 	//////////////////////////////////////////////////////////////////////////////////
 
-    (SpeechSynthProto = SpeechSynth.prototype).nothing = function(){};
+    (SpeechSynthProto = SpeechSynth.prototype).nothing = function () {};
 
 	//////////////////////////////////////////////////////////////////////////////////
 
-    SpeechSynthProto.setOptions = function(options){
-        var hasOwnProp = Object.prototype.hasOwnProperty;
+    SpeechSynthProto.setOptions = function (options) {
+        var hasOwnProp = Object.prototype.hasOwnProperty,
+            option;
 
         // setup defaults for all options that we want users to update
         this.options = {
-
+            controlLocation: "Bottom-Right",
+            defaultLanguageText: 'Google US English',
+            volume: 1,
+            rate: 1,
+            pitch: 1,
         };
 
         // set user specified options
-        if(options){
-            for (var option in this.options) {
+        if (options) {
+            for (option in this.options) {
 				if (hasOwnProp.call(this.options, option) && options[option] !== undefined) {
 					this.options[option] = options[option];
 				}
@@ -60,7 +61,7 @@
 
     //////////////////////////////////////////////////////////////////////////////////
 
-    SpeechSynthProto.speechSynthSpeak = function(text) {
+    SpeechSynthProto.speechSynthSpeak = function (text) {
         if (text) {
             var utterThis = new SpeechSynthesisUtterance(text);
             var selectedOption = this.voiceSelector.selectedOptions[0].getAttribute('data-name');
@@ -70,9 +71,9 @@
                 }
             }
 
-            utterThis.volume = (this.volume) ? this.volume : utterthis.volume;
-            utterThis.rate = (this.rate) ? this.rate : utterthis.rate;
-            utterThis.pitch = (this.pitch) ? this.pitch : utterthis.pitch;
+            utterThis.volume = this.options.volume;
+            utterThis.rate = this.options.rate;
+            utterThis.pitch = this.options.pitch;
 
             this.speechSynth.speak(utterThis);
         }
@@ -80,15 +81,17 @@
     
 	//////////////////////////////////////////////////////////////////////////////////
     
-    SpeechSynthProto.generateAudioControls = function(){
+    SpeechSynthProto.generateAudioControls = function () {
         // TODO: Create HTML components and add them into the DOM
         // Allow user to customize classes or provide their own HTML for the controls
         // and specify buttons for each action
+        
+        // controlLocation: Top, Bottom, Left, Right, Top-Left, Top-Right, Bottom-Left, Bottom-Right
     };
     
 	//////////////////////////////////////////////////////////////////////////////////
     
-    SpeechSynthProto.populateVoiceList = function(){
+    SpeechSynthProto.populateVoiceList = function () {
         var voices = this.speechSynth.getVoices();
 
         for (i = 0; i < voices.length; i++) {
@@ -106,7 +109,7 @@
         
         // default needs work to run on all browsers properly
         for (var i = 0; i < voiceSelect.options.length; i++) {
-            if (this.voiceSelector.options[i].getAttribute('data-name') == this.defaultLanguageText) {
+            if (this.voiceSelector.options[i].getAttribute('data-name') == this.options.defaultLanguageText) {
                 this.voiceSelector.selectedIndex = i;
                 break;
             }
@@ -115,7 +118,7 @@
 
 	//////////////////////////////////////////////////////////////////////////////////
     
-    SpeechSynthProto.addEvents = function(){
+    SpeechSynthProto.addEvents = function ( ) {
         // Add the play button
         this.events.push(this.playButton.addEventListener(this.clickEvt, function(event) {
             event.preventDefault();
@@ -135,7 +138,7 @@
 
 	//////////////////////////////////////////////////////////////////////////////////
 	
-    SpeechSynthProto.init = function() {
+    SpeechSynthProto.init = function ( ) {
 		// Set up events and load in everything
         this.generateAudioControls();
 		this.populateVoiceList();
@@ -144,7 +147,7 @@
     
     //////////////////////////////////////////////////////////////////////////////////
 
-    SpeechSynthProto.getSelectionText = function() {
+    SpeechSynthProto.getSelectionText = function ( ) {
         var text = ""
         if (window.getSelection) {
             text = window.getSelection().toString();
