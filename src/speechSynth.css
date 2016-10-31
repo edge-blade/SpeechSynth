@@ -8,7 +8,7 @@
 
 /* Location Classes */
 .speechSynth-container {
-    height: 100px;
+    height: 82px;
     width: 300px;
     position: fixed;
     z-index: 1;
@@ -27,7 +27,7 @@
 
 /* Open from Top */
 .speechSynth-container.top { top: 0px; left: 0px; right: 0px; margin: auto; }
-.speechSynth-container.top.closed { top: -100px; }
+.speechSynth-container.top.closed { top: -82px; }
 .speechSynth-container.top .speechSynth-toggle { 
     width:100%; 
     height: 25px; 
@@ -38,7 +38,7 @@
 
 /* Open from Bottom */
 .speechSynth-container.bottom { bottom: 0px; left: 0px; right: 0px; margin: auto; }
-.speechSynth-container.bottom.closed { bottom: -100px; }
+.speechSynth-container.bottom.closed { bottom: -82px; }
 .speechSynth-container.bottom .speechSynth-toggle { 
     width:100%; 
     height: 25px; 
@@ -67,4 +67,42 @@
     left: -15px;
     top: -1px;
     border-radius: 15px 0px 0px 15px;
+}
+
+/* form controls */
+
+.speechSynth-container select,
+.speechSynth-container button {
+    margin: 2px;
+}
+
+/* Button Styles */
+.speechSynth-button {
+    border-color: #599bb3;
+	background-color:#599bb3;
+	-moz-border-radius:8px;
+	-webkit-border-radius:8px;
+	border-radius:8px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:14px;
+	font-weight:bold;
+	padding:8px 16px;
+	text-decoration:none;
+}
+.speechSynth-button:hover {
+    border-color: #408c99;
+	background-color:#408c99;
+}
+.speechSynth-button:active {
+	position:relative;
+	top:1px;
+}
+
+/* Select */
+.speechSynth-select {
+    height: 36px;
+    width: 98%;
 }
