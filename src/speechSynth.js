@@ -15,12 +15,15 @@
             this.speechSynth = window.speechSynthesis;
 
             // Setup plugin specific options
-            this.popoutElement = {};
             this.isVisible = false; // for toggle control
             this.voiceSelector = {};
             this.playButton = {};
             this.pauseButton = {};
             this.events = [];
+
+            // Toggle element
+            this.popoutElement = {};
+            this.toggleButton = {};
 
             // Event types
             this.clickEvt = (this.usesTouch) ? "touchstart" : "mousedown";
@@ -42,7 +45,7 @@
 
         // setup defaults for all options that we want users to update
         this.options = {
-            controlLocation: "Bottom-Right",
+            controlLocation: "right",
             defaultLanguageText: 'Google US English',
             volume: 1,
             rate: 1,
@@ -86,7 +89,37 @@
         // Allow user to customize classes or provide their own HTML for the controls
         // and specify buttons for each action
         
-        // controlLocation: Top, Bottom, Left, Right, Top-Left, Top-Right, Bottom-Left, Bottom-Right
+        // controlLocation: top, bottom, left, right
+        // Create container
+        this.popoutElement = document.createElement('div');
+        this.popoutElement.className = 'speechSynth-container ' + this.options.controlLocation.toLowerCase();
+        this.popoutElement.id = 'speechSynth-container';
+        
+        this.toggleButton = document.createElement('div');
+        tabElement.className = 'speechSynth-toggle';
+        tabElement.id = 'speechSynth-toggle';
+        this.popoutElement.appendChild(this.toggleButton);
+
+        // create other controls
+        var controlsContainer = document.createElement('div');
+        controlsContainer.className = 'speechSynth-controls';
+
+        // Select
+        this.voiceSelector = CreateNewDomElement('select', 'speechSynth-select', 'speechSynth-select');
+        controlsContainer.appendChild(this.voiceSelector);
+        
+        // Play button
+        this.playButton = CreateNewDomElement('button', 'speechsynth-play', 'speechsynth-play');
+        controlsContainer.appendChild(this.playButton);
+
+        // Pause button
+        this.pauseButton = CreateNewDomElement('button', 'speechsynth-pause', 'speechsynth-pause');
+        controlsContainer.appendChild(this.pauseButton);
+        
+        // append controls to container
+        this.popoutElement.appendChild(controlsContainer);
+        // Add controls to the page
+        document.appendChild(this.popoutElement);
     };
     
 	//////////////////////////////////////////////////////////////////////////////////
@@ -134,6 +167,18 @@
                 this.speechSynth.cancel();
             }
         }));
+        
+        // HTML control events
+        function toggleMenu() {
+            this.isVisible = !this.isVisible;
+            if (this.isVisible) {
+                // Hide the menu
+                
+            } else {
+                // Show the menu
+                
+            }
+        }
     };
 
 	//////////////////////////////////////////////////////////////////////////////////
@@ -158,6 +203,25 @@
     }
    
 	//////////////////////////////////////////////////////////////////////////////////
+    //
+    //                                 Utility
+    //
+	//////////////////////////////////////////////////////////////////////////////////
+
+    function CreateNewDomElement(elementName, idName, className){
+        if(!elementName){
+            elementName = 'div'; // Default to div
+        }
+        var element = document.createElement(elementName);
+        if (idName) {
+            element.id = idName;
+        }
+        if (className) { 
+            element.className = className;
+        }
+
+        return element;
+    } 
 
     // Expose class to user
     window.SpeechSynth = SpeechSynth;

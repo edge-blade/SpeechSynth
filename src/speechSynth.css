@@ -5,3 +5,62 @@
     -ms-user-select: none;
     user-select: none;
 }
+
+/* Location Classes */
+.speechSynth-container {
+    height: 100px;
+    width: 300px;
+    position: fixed;
+    z-index: 1;
+    border: 1px solid #ababab;
+    transition: 0.5s;
+}
+
+.speechSynth-toggle {
+    border: 1px solid #ababab;
+    position: absolute;
+}
+
+/* Open from Top */
+.speechSynth-container.top { top: 0px; left: 0px; right: 0px; margin: auto; }
+.speechSynth-container.top.closed { top: -100px; }
+.speechSynth-container.top .speechSynth-toggle { 
+    width:100%; 
+    height: 25px; 
+    bottom: -25px;
+    left: -1px;
+    border-radius: 0px 0px 15px 15px;
+}
+
+/* Open from Bottom */
+.speechSynth-container.bottom { bottom: 0px; left: 0px; right: 0px; margin: auto; }
+.speechSynth-container.bottom.closed { bottom: -100px; }
+.speechSynth-container.bottom .speechSynth-toggle { 
+    width:100%; 
+    height: 25px; 
+    top: -25px;
+    left: -1px;
+    border-radius: 15px 15px 0px 0px;
+}
+
+/* Open from Left */
+.speechSynth-container.left { left: 0px; top: 0px; bottom: 0px; margin: auto; }
+.speechSynth-container.left.closed { left: -300px; }
+.speechSynth-container.left .speechSynth-toggle { 
+    height:100%; 
+    width: 15px; 
+    right: -15px;
+    top: -1px;
+    border-radius: 0px 15px 15px 0px;
+}
+
+/* Open from Right */
+.speechSynth-container.right { right: 0px; top: 0px; bottom: 0px; margin: auto; }
+.speechSynth-container.right.closed { right: -300px; }
+.speechSynth-container.right .speechSynth-toggle { 
+    height:100%; 
+    width: 15px; 
+    left: -15px;
+    top: -1px;
+    border-radius: 15px 0px 0px 15px;
+}
