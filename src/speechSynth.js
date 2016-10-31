@@ -67,9 +67,11 @@
 
     SpeechSynthProto.speechSynthSpeak = function (text) {
         if (text) {
+            var voices = this.speechSynth.getVoices();
+            
             var utterThis = new SpeechSynthesisUtterance(text);
             var selectedOption = this.voiceSelector.selectedOptions[0].getAttribute('data-name');
-            for (i = 0; i < voices.length; i++) {
+            for (var i = 0; i < voices.length; i++) {
                 if (voices[i].name === selectedOption) {
                     utterThis.voice = voices[i];
                 }
@@ -132,10 +134,10 @@
     
 	//////////////////////////////////////////////////////////////////////////////////
     
-    SpeechSynthProto.populateVoiceList = function () {
-        var voices = this.speechSynth.getVoices();
+    SpeechSynthProto.populateVoiceList = function (self) {
+        var voices = self.speechSynth.getVoices();
 
-        for (i = 0; i < voices.length; i++) {
+        for (var i = 0; i < voices.length; i++) {
             var option = document.createElement('option');
             option.textContent = voices[i].name + ' (' + voices[i].lang + ')';
 
@@ -145,13 +147,13 @@
 
             option.setAttribute('data-lang', voices[i].lang);
             option.setAttribute('data-name', voices[i].name);
-            this.voiceSelector.appendChild(option);
+            self.voiceSelector.appendChild(option);
         }
         
         // default needs work to run on all browsers properly
         for (var i = 0; i < this.voiceSelector.options.length; i++) {
-            if (this.voiceSelector.options[i].getAttribute('data-name') == this.options.defaultLanguageText) {
-                this.voiceSelector.selectedIndex = i;
+            if (self.voiceSelector.options[i].getAttribute('data-name') == self.options.defaultLanguageText) {
+                self.voiceSelector.selectedIndex = i;
                 break;
             }
         }
@@ -187,6 +189,12 @@
                 self.popoutElement.className = self.popoutElement.className.replace(closedClass, '');
             }
         });
+        
+        // setup voice list listener
+        if (self.speechSynth.onvoiceschanged !== undefined) {
+            // Needed anonymous function to allow callback to another function with parameters
+            self.speechSynth.onvoiceschanged = function() { self.populateVoiceList(self); };
+        }
     };
 
 	//////////////////////////////////////////////////////////////////////////////////
@@ -194,7 +202,6 @@
     SpeechSynthProto.init = function ( ) {
 		// Set up events and load in everything
         this.generateAudioControls();
-		this.populateVoiceList();
 		this.addEvents();
 	};
     
@@ -230,7 +237,7 @@
 
         return element;
     } 
-
+        
     // Expose class to user
     window.SpeechSynth = SpeechSynth;
 
