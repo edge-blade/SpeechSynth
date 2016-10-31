@@ -13,11 +13,15 @@
     position: fixed;
     z-index: 1;
     border: 1px solid #ababab;
+    background: #8193a9;
     transition: 0.5s;
+    opacity: .9;
 }
 
 .speechSynth-toggle {
     border: 1px solid #ababab;
+    opacity: .8;
+    background: #ababab;
     position: absolute;
 }
 
