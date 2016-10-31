@@ -89,7 +89,7 @@
 	//////////////////////////////////////////////////////////////////////////////////
     
     SpeechSynthProto.populateVoiceList = function(){
-        voices = this.speechSynth.getVoices();
+        var voices = this.speechSynth.getVoices();
 
         for (i = 0; i < voices.length; i++) {
             var option = document.createElement('option');
@@ -157,6 +157,6 @@
 	//////////////////////////////////////////////////////////////////////////////////
 
     // Expose class to user
-    window.SpeechSynthInstance = SpeechSynth;
+    window.SpeechSynth = SpeechSynth;
 
 })(this, this.document);
